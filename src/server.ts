@@ -17,6 +17,7 @@ app.get("/", (req: Request, res: Response) => {
     success: true,
     message: "The root route is on!",
     author: "SAYED",
+    authr: "SAYED"
   });
 });
 
