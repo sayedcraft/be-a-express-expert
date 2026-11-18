@@ -5,16 +5,16 @@ import express, {
   type Response,
 } from "express";
 import { Pool } from "pg";
+import config from "./config";
 const app: Application = express();
-const port = 3000;
+// const port = 3000;
 
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
 
 const pool = new Pool({
-  connectionString:
-    "postgresql://neondb_owner:npg_fTGV9elYzPr2@ep-sweet-wildflower-a1b4sfsv.ap-southeast-1.aws.neon.tech/neondb?sslmode=false&channel_binding=require",
+  connectionString: config.connection_string,
 });
 // console.log(pool);
 
@@ -117,6 +117,12 @@ app.get("/api/v1/users/:id", async (req: Request, res: Response) => {
     );
 
     // console.log(result);
+    if (result.rowCount == 0) {
+      res.status(404).json({
+        success: false,
+        message: "User not found!",
+      });
+    }
 
     res.status(200).json({
       success: true,
@@ -152,6 +158,12 @@ app.put("/api/v1/users/:id", async (req: Request, res: Response) => {
     );
 
     // console.log(result);
+    if (result.rowCount == 0) {
+      res.status(404).json({
+        success: false,
+        message: "User not found!",
+      });
+    }
 
     res.status(200).json({
       success: true,
@@ -167,6 +179,39 @@ app.put("/api/v1/users/:id", async (req: Request, res: Response) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+app.delete("/api/v1/users/:id", async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const result = await pool.query(
+      `
+      DELETE FROM users 
+      WHERE id = $1  
+    `,
+      [id],
+    );
+    // console.log(result);
+
+    if (result.rowCount == 0) {
+      res.status(404).json({
+        success: false,
+        message: "User not found!",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully!",
+      // data: result.rows[0],
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error?.message,
+      error: error,
+    });
+  }
+});
+
+app.listen(config.port, () => {
+  console.log(`Example app listening on port ${config.port}`);
 });
