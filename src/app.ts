@@ -5,13 +5,13 @@ import express, {
   type Response,
 } from "express";
 import { pool } from "./db";
+import { userRouter } from "./modules/users/user.route";
 const app: Application = express();
 // const port = 3000;
 
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
-
 
 app.get("/", (req: Request, res: Response) => {
   // res.send("Hello World!");
@@ -22,37 +22,7 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
-app.post("/api/v1/users", async (req: Request, res: Response) => {
-  try {
-    // console.log(req.body);
-
-    const { name, email, password, age } = req.body;
-    // console.log(password);
-
-    const result = await pool.query(
-      `
-    INSERT INTO users (name,email,password,age)
-    VALUES ($1,$2,$3,$4)
-    RETURNING * 
-  `,
-      [name, email, password, age],
-    );
-
-    // console.log(result);
-
-    res.status(201).json({
-      success: true,
-      message: "User create successfully!",
-      data: result.rows[0],
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error?.message,
-      error: error,
-    });
-  }
-});
+app.use("/api/v1/users", userRouter);
 
 app.get("/api/v1/users", async (req: Request, res: Response) => {
   try {
