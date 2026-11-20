@@ -51,8 +51,7 @@ const updateUserFromDB = async (payLoad: any, id: string) => {
       age = COALESCE($3, age),  
       is_active = COALESCE($4, is_active),
       updated_at = NOW()
-      WHERE id =$5 
-      RETURNING *
+      WHERE id =$5 RETURNING *
      `,
     [name ?? null, password ?? null, age ?? null, is_active ?? null, id],
   );
