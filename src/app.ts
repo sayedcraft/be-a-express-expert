@@ -6,12 +6,17 @@ import express, {
 } from "express";
 import { pool } from "./db";
 import { userRouter } from "./modules/users/user.route";
+import { profileRoute } from "./modules/profiles/profile.route";
 const app: Application = express();
 // const port = 3000;
 
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
+
+
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/profiles",profileRoute)
 
 app.get("/", (req: Request, res: Response) => {
   // res.send("Hello World!");
@@ -23,7 +28,6 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
-app.use("/api/v1/users", userRouter);
 
 
 
