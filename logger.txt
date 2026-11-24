@@ -94,3 +94,9 @@ Method : GET | URL : /api/v1/users/ | Time : 1795523712699
 Method : GET | URL : /api/v1/users | Time : 1795523737055
 
 Method : GET | URL : /.well-known/appspecific/com.chrome.devtools.json | Time : 1795523737115
+
+Method : GET | URL : /api/v1/users/ | Time : 1795523903863
+
+Method : GET | URL : /api/v1/users/ | Time : 1795523907579
+
+Method : GET | URL : /api/v1/users/ | Time : 1795523913006
